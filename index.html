@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qadam Flow — автоматизация рабочих процессов</title>
+  <meta name="description" content="Open-source автоматизация рабочих процессов. Локализованная, self-hosted, без платных тарифов и enterprise-замков. Первый проект AI Qadam Build." />
+
+  <meta property="og:title" content="Qadam Flow" />
+  <meta property="og:description" content="Автоматизация рабочих процессов — построенная регионом, для региона." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://flow.aiqadam.org" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a0b0f;
+      --bg-elev: #11131a;
+      --border: #1f222d;
+      --border-strong: #2a2e3c;
+      --text: #e8eaf0;
+      --text-muted: #8a8fa3;
+      --text-dim: #5c6175;
+      --accent: #7cffb0;
+      --accent-soft: rgba(124, 255, 176, 0.12);
+      --accent-line: rgba(124, 255, 176, 0.35);
+      --warn: #ffd27c;
+      --maxw: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    code, .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+    a { color: var(--text); text-decoration: none; }
+    a:hover { color: var(--accent); }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* nav */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(10, 11, 15, 0.75);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; }
+    .brand-mark {
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent), #4dd0a0);
+      display: grid; place-items: center;
+      color: #0a0b0f; font-weight: 800; font-size: 14px;
+    }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { color: var(--text-muted); font-size: 14px; font-weight: 500; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 8px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      color: var(--text) !important;
+    }
+    .nav-cta:hover { border-color: var(--accent-line); color: var(--accent) !important; }
+    @media (max-width: 720px) {
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+
+    /* hero */
+    .hero {
+      padding: 96px 0 88px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(124, 255, 176, 0.08), transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 20%, rgba(77, 208, 160, 0.05), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 820px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      font-size: 12px; font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px var(--accent);
+    }
+    h1 {
+      font-size: clamp(40px, 6vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      margin: 0 0 24px;
+      font-weight: 700;
+    }
+    h1 .accent { color: var(--accent); }
+    .lede {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 0 40px;
+    }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 15px; font-weight: 600;
+      transition: transform 0.08s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0b0f !important;
+    }
+    .btn-primary:hover { transform: translateY(-1px); background: #94ffc1; }
+    .btn-secondary {
+      border: 1px solid var(--border-strong);
+      color: var(--text) !important;
+    }
+    .btn-secondary:hover { border-color: var(--accent-line); color: var(--accent) !important; }
+    .btn svg { width: 16px; height: 16px; }
+
+    .tagline-strip {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; gap: 24px 40px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .tagline-strip span { display: inline-flex; align-items: center; gap: 8px; }
+    .tagline-strip .check { color: var(--accent); }
+
+    /* section */
+    section.block {
+      padding: 88px 0;
+      border-top: 1px solid var(--border);
+    }
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 0 0 20px;
+      max-width: 720px;
+      font-weight: 700;
+    }
+    .section-lede {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 0 48px;
+    }
+
+    /* why */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .why-quote {
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .why-quote em { color: var(--accent); font-style: normal; font-weight: 600; }
+    .why-points { display: grid; gap: 20px; }
+    .why-point { display: flex; gap: 14px; align-items: flex-start; }
+    .why-point-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 500;
+      color: var(--text-dim);
+      padding-top: 4px;
+      min-width: 24px;
+    }
+    .why-point-text { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+    .why-point-text strong { color: var(--text); font-weight: 600; }
+    @media (max-width: 760px) {
+      .why-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    /* features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .feature {
+      background: var(--bg-elev);
+      padding: 32px;
+    }
+    .feature-icon {
+      width: 36px; height: 36px;
+      border-radius: 9px;
+      background: var(--accent-soft);
+      display: grid; place-items: center;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+    .feature-icon svg { width: 18px; height: 18px; }
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .feature p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    @media (max-width: 880px) { .features { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .features { grid-template-columns: 1fr; } }
+
+    /* stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+    .stat-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+    /* quickstart */
+    .quickstart-wrap { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center; }
+    @media (max-width: 820px) { .quickstart-wrap { grid-template-columns: 1fr; gap: 32px; } }
+
+    .code-block {
+      background: #06070a;
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 20px 22px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text);
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block .cmt { color: var(--text-dim); }
+    .code-block .prompt { color: var(--accent); user-select: none; }
+
+    /* status */
+    .status-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--warn);
+      border-radius: 12px;
+      padding: 28px 32px;
+    }
+    .status-card h3 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--warn);
+    }
+    .status-card p { margin: 0 0 12px; color: var(--text-muted); font-size: 15px; }
+    .status-card p:last-child { margin-bottom: 0; }
+
+    /* footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0 56px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { color: var(--text-muted); }
+    .footer-meta { color: var(--text-dim); font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark">Q</span>
+      <span>Qadam Flow</span>
+    </a>
+    <div class="nav-links">
+      <a href="#why">Зачем</a>
+      <a href="#features">Возможности</a>
+      <a href="#quickstart">Быстрый старт</a>
+      <a href="https://github.com/aiqadam/qadam-flow" class="nav-cta" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container hero-inner">
+    <div class="badge">
+      <span class="dot"></span>
+      Первый проект AI Qadam Build · Open-source
+    </div>
+    <h1>
+      Автоматизация — <span class="accent">построенная регионом</span>, для региона.
+    </h1>
+    <p class="lede">
+      Qadam Flow — open-source платформа для автоматизации рабочих процессов. Соединяет приложения и сервисы визуальными потоками. Локализованная, self-hosted, без платных тарифов и enterprise-замков.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/aiqadam/qadam-flow" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.04 11.04 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.66.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        Открыть на GitHub
+      </a>
+      <a class="btn btn-secondary" href="#quickstart">
+        Быстрый старт
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="tagline-strip">
+      <span><span class="check">✓</span> Локализована</span>
+      <span><span class="check">✓</span> Self-hosted</span>
+      <span><span class="check">✓</span> Без платных тарифов</span>
+      <span><span class="check">✓</span> Без enterprise-замков</span>
+      <span><span class="check">✓</span> Без vendor lock-in</span>
+    </div>
+  </div>
+</header>
+
+<section class="block" id="why">
+  <div class="container">
+    <div class="eyebrow">Зачем это нужно</div>
+    <h2>Регион запускает свою автоматизацию на чужой инфраструктуре.</h2>
+
+    <div class="why-grid">
+      <div class="why-quote">
+        Биллинг в долларах, серверы за рубежом, языки не наши, а функции которые действительно важны — <em>SSO, RBAC, audit logs</em> — заперты за enterprise paywall.
+        <br /><br />
+        Qadam Flow — это собственная платформа региона: локализованная, self-hosted, данные остаются дома, замки сняты.
+        <br /><br />
+        Дело не в «бесплатном Zapier» — дело в <em>независимости</em>.
+      </div>
+      <div class="why-points">
+        <div class="why-point">
+          <span class="why-point-num">01</span>
+          <div class="why-point-text">
+            <strong>Данные остаются у вас.</strong> Self-hosted развёртывание — на вашей инфраструктуре, в вашей юрисдикции.
+          </div>
+        </div>
+        <div class="why-point">
+          <span class="why-point-num">02</span>
+          <div class="why-point-text">
+            <strong>Никаких enterprise-замков.</strong> SSO, RBAC, audit logs — в roadmap, никогда за paywall.
+          </div>
+        </div>
+        <div class="why-point">
+          <span class="why-point-num">03</span>
+          <div class="why-point-text">
+            <strong>Языки региона.</strong> Интерфейс на русском, узбекском, казахском, английском.
+          </div>
+        </div>
+        <div class="why-point">
+          <span class="why-point-num">04</span>
+          <div class="why-point-text">
+            <strong>Региональные интеграции.</strong> Payme, Click, Uzum, Kaspi и локальные API — приоритет, а не «когда-нибудь».
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="features">
+  <div class="container">
+    <div class="eyebrow">Что внутри</div>
+    <h2>Полноценная платформа автоматизации — без компромиссов.</h2>
+    <p class="section-lede">
+      Построена на MIT-ядре <a href="https://github.com/activepieces/activepieces" target="_blank" rel="noopener" style="color: var(--accent)">Activepieces</a> с удалённым enterprise-кодом. Каждая возможность — свободная и открытая.
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M9 6h6a3 3 0 0 1 3 3v6"/></svg>
+        </div>
+        <h3>Визуальный конструктор</h3>
+        <p>Drag-and-drop редактор потоков. Никакого кода — соединяйте сервисы как блоки.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>715+ интеграций</h3>
+        <p>Унаследованы из экосистемы Activepieces. От Slack и Notion до баз данных и облаков.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4.5L6 21l1.5-7.5L2 9h7z"/></svg>
+        </div>
+        <h3>~400 MCP-серверов</h3>
+        <p>Любой MCP-совместимый AI-агент может вызывать интеграции как инструменты.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>
+        </div>
+        <h3>Self-hosted</h3>
+        <p>Docker-образ, Helm-чарт, ваша инфраструктура. Данные не покидают периметр.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+        </div>
+        <h3>Мультиязычность</h3>
+        <p>UI на русском, узбекском, казахском, английском. Локализация в работе.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3>SSO, RBAC, аудит — бесплатно</h3>
+        <p>В roadmap. Никогда за paywall. Безопасность — это не enterprise-фича.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div>
+        <div class="stat-num">715+</div>
+        <div class="stat-label">интеграций</div>
+      </div>
+      <div>
+        <div class="stat-num">~400</div>
+        <div class="stat-label">MCP-серверов</div>
+      </div>
+      <div>
+        <div class="stat-num">4</div>
+        <div class="stat-label">языка интерфейса</div>
+      </div>
+      <div>
+        <div class="stat-num">MIT</div>
+        <div class="stat-label">лицензия</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="quickstart">
+  <div class="container">
+    <div class="quickstart-wrap">
+      <div>
+        <div class="eyebrow">Быстрый старт</div>
+        <h2>Один Docker-compose и вы внутри.</h2>
+        <p class="section-lede">
+          Нужен Docker. Клонируйте репозиторий, скопируйте конфиг, поднимите — приложение доступно по адресу <code style="color: var(--accent)">http://localhost:8080</code>.
+        </p>
+        <a class="btn btn-secondary" href="https://github.com/aiqadam/qadam-flow#quick-start" target="_blank" rel="noopener">
+          Полная документация
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="code-block">
+<span class="prompt">$</span> git clone https://github.com/aiqadam/qadam-flow.git
+<span class="prompt">$</span> cd qadam-flow
+<span class="prompt">$</span> cp .env.example .env     <span class="cmt"># адаптируйте под себя</span>
+<span class="prompt">$</span> docker compose up -d
+
+<span class="cmt"># Откройте http://localhost:8080</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="container">
+    <div class="eyebrow">Статус</div>
+    <h2>Ранняя стадия — и мы честны об этом.</h2>
+
+    <div class="status-card">
+      <h3>Что готово, что в работе</h3>
+      <p>
+        MIT-ядро Activepieces форкнуто и очищено от enterprise-кода. Локализация и региональные интеграции — текущий фокус.
+      </p>
+      <p>
+        Enterprise-функции (SSO / RBAC / аудит) собираются по мере реальных потребностей развёртываний — не по фиксированному графику. Подробности в <a href="https://github.com/aiqadam/qadam-flow/blob/main/ROADMAP.md" target="_blank" rel="noopener" style="color: var(--accent)">Roadmap</a>.
+      </p>
+      <p>
+        Поддерживается AI Qadam — пока под опекой основателя, но устроено так, чтобы принадлежать сообществу (DCO, без передачи копирайта).
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="container">
+    <div class="eyebrow">Как присоединиться</div>
+    <h2>Не обязательно быть экспертом — достаточно того, что вам не всё равно.</h2>
+    <p class="section-lede">
+      Простой и весомый старт:
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <h3>Пишите Pieces</h3>
+        <p>Соберите интеграцию которая нужна региону — Payme, Click, Uzum, Kaspi, локальные API.</p>
+      </div>
+      <div class="feature">
+        <h3>Переводите интерфейс</h3>
+        <p>Локализация — без кода. Узбекский, казахский, русский, английский.</p>
+      </div>
+      <div class="feature">
+        <h3>Тестируйте и репортите</h3>
+        <p>Запустите, сломайте, оформите issue. Воспроизводимый баг — половина исправления.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a class="btn btn-primary" href="https://github.com/aiqadam/qadam-flow/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">
+        Как начать
+      </a>
+      <a class="btn btn-secondary" href="https://aiqadam.org" target="_blank" rel="noopener">
+        AI Qadam →
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-links">
+      <a href="https://github.com/aiqadam/qadam-flow" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/aiqadam/qadam-flow/blob/main/ROADMAP.md" target="_blank" rel="noopener">Roadmap</a>
+      <a href="https://github.com/aiqadam/qadam-flow/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a>
+      <a href="https://github.com/aiqadam/qadam-flow/blob/main/GOVERNANCE.md" target="_blank" rel="noopener">Governance</a>
+      <a href="https://aiqadam.org" target="_blank" rel="noopener">aiqadam.org</a>
+    </div>
+    <div class="footer-meta">
+      MIT · Проект AI Qadam Build · #AIQadam
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
