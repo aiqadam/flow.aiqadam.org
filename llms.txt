@@ -1,43 +1,82 @@
 # Qadam Flow
 
 > Open-source workflow automation, built by the region for the region.
-> Localised, self-hosted, free of paid tiers and enterprise paywalls.
+> Self-hosted, no paid tiers, no enterprise paywall.
 > The inaugural AI Qadam Build project.
 
-Qadam Flow is a visual workflow automation platform — connect apps and
-services with drag-and-drop flows. It is forked from the MIT-licensed
+Qadam Flow is a visual workflow automation platform — drag-and-drop
+flows, real integrations, AI as a first-class step. It is forked from
+the MIT-licensed
 [Activepieces](https://github.com/activepieces/activepieces) core, with
-enterprise code removed and Central-Asia-first localisation and integrations
-prioritised in its place.
+all enterprise code removed.
 
 The product code lives at
 `https://github.com/aiqadam/qadam-flow`. This site
 (`https://flow.aiqadam.org/`) is the public landing.
 
-## What it is
+## What ships today
 
-- **Open-source workflow automation** — visual builder, no code required.
-- **Self-hosted** — Docker image, Helm chart, your infrastructure. Data
-  never leaves the perimeter.
-- **Localised** — UI in Russian, Uzbek, Kazakh, English. Localisation is
-  ongoing.
-- **Regional integrations** — Payme, Click, Uzum, Kaspi, and local APIs
-  are priority work, not "someday" tickets.
-- **No enterprise paywall** — SSO, RBAC, audit logs are roadmap items,
-  never paid features.
-- **MIT licensed.**
+- **238 qadams** — 27 core + 211 community integrations, inherited from
+  the Activepieces ecosystem and free of enterprise gating.
+- **252 ready-made templates** — each with the full step graph, setup
+  guide, and measured time and cost savings.
+- **AI as a first-class step** — Anthropic, AWS Bedrock, Azure,
+  Cloudflare AI Gateway, Google Gemini, Mistral, plus anything
+  OpenAI-compatible (Ollama, vLLM, LM Studio).
+- **MCP support** — every flow becomes an MCP tool. Plug Qadam Flow into
+  Cursor, Windsurf, or Claude Desktop and your automations show up
+  natively.
+- **Run inspector** — every run lands in a queryable history; drill into
+  any step for inputs, outputs, and timing.
+- **Multi-tenant from day one** — platform → projects → users, with
+  strong tenant isolation enforced at the query level.
+- **11 UI locales** — English, Russian, Arabic, German, Spanish, French,
+  Japanese, Dutch, Portuguese, Chinese (Simplified and Traditional).
+- **MIT-licensed** — no edition gating, no paid tiers, no enterprise
+  feature flags.
+- **One-command self-host** — `curl -fsSL https://flow.aiqadam.org/run.sh | sh`
+  brings up Postgres, Redis, the app, and workers on port 8080.
+
+## What is in progress
+
+- **Regional integrations** (Payme, Click, Uzum, Kaspi) — planned,
+  contributors welcome.
+- **Uzbek and Kazakh UI translations** — not yet shipped; translation
+  strings live in JSON, no code required.
+- **SSO, RBAC, audit logs** — scaffolding is in the codebase, but they
+  are not production-ready. Built demand-driven as real deployments
+  need them. **Do not run security-critical workloads on Qadam Flow
+  yet.**
+
+## Landing-page story arc
+
+The landing at `https://flow.aiqadam.org/` walks through the product in
+nine sections:
+
+1. **Hero** — what it is, primary CTAs, dashboard screenshot.
+2. **Why** — independence, not "free Zapier"; the four-point case.
+3. **Templates** — 252 templates with a worked example.
+4. **The builder** — Ollama-AI-Webhook flow, end to end.
+5. **Integrations** — 238 qadams, Stripe trigger example, stats tiles.
+6. **AI** — provider list + MCP server, side by side.
+7. **Run inspector** — per-step execution history.
+8. **Self-host** — multi-tenant platform admin + one-command quickstart.
+9. **Status** — honest framing of what's not yet built (SSO/RBAC/audit,
+   regional payments, UZ/KZ translations).
+
+Plus a closing CTA section with the sign-in screen.
 
 ## Key pages
 
 - [Landing — flow.aiqadam.org](https://flow.aiqadam.org/): the canonical
-  public page, with the why, the feature list, a Docker quickstart, and
-  honest status of the project.
+  public page, walking through nine product screenshots and an honest
+  status section.
 - [Source repository](https://github.com/aiqadam/qadam-flow): code,
   issues, roadmap, contributing guide, governance.
 - [Roadmap](https://github.com/aiqadam/qadam-flow/blob/main/ROADMAP.md):
   what is built, what is in progress, what is on the radar.
 - [Contributing](https://github.com/aiqadam/qadam-flow/blob/main/CONTRIBUTING.md):
-  how to write a piece, translate the UI, or report a bug.
+  how to write a qadam, translate the UI, or report a bug.
 - [Governance](https://github.com/aiqadam/qadam-flow/blob/main/GOVERNANCE.md):
   how decisions are made; DCO; no copyright assignment.
 
@@ -52,21 +91,13 @@ Global Board). It is not a brand a partner can buy.
 - AI Qadam Brand Guidelines: `https://brand.aiqadam.org`
 - AI Qadam Build (open-source infrastructure layer): `https://build.aiqadam.org`
 
-## What stage it is at
-
-Early. Honest about it. The MIT core of Activepieces has been forked and
-cleaned of enterprise code; localisation and regional integrations are the
-current focus. Enterprise functions (SSO / RBAC / audit) are built as real
-deployments need them, not on a fixed schedule. Maintained by AI Qadam,
-under the founder's stewardship today but structured to belong to the
-community over time (DCO, no copyright assignment).
-
 ## Important constraints
 
-- AI Qadam brand assets (name, marks, wordmark, four-dot motif, brand teal
-  as primary brand colour) used on this site are NOT covered by Qadam
-  Flow's MIT licence — they remain © AI Qadam Community and are governed
-  by the [Brand Usage Policy](https://brand.aiqadam.org/brand-use.html).
+- AI Qadam brand assets (name, marks, wordmark, four-dot motif, brand
+  teal as primary brand colour) used on this site are NOT covered by
+  Qadam Flow's MIT licence — they remain © AI Qadam Community and are
+  governed by the
+  [Brand Usage Policy](https://brand.aiqadam.org/brand-use.html).
 - "AI Qadam Build" status cannot be self-declared by forks. Recognition
   is granted by community leads.
 - The product is open-source under MIT. The brand is not.

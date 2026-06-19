@@ -22,12 +22,17 @@ index.html          → the whole landing
 
 Sections inside `index.html` (single-page anchored nav):
 
-- `#hero`           — name, tagline, primary CTA
+- *(hero)*          — name, tagline, primary CTA, dashboard screenshot
 - `#why`            — positioning ("region builds its own automation")
-- `#features`       — what's inside the platform
-- `#quickstart`     — Docker compose snippet
-- *(status)*        — "early stage and honest about it"
-- *(join)*          — how to contribute
+- `#tour`           — templates (252-template library)
+- `#builder`        — flow builder, Ollama AI Webhook hero screenshot
+- `#integrations`   — 238 qadams, Stripe trigger, stats tiles
+- `#ai`             — AI providers + MCP, side-by-side dual shot
+- `#runs`           — run inspector
+- `#self-host`      — multi-tenant admin + one-command quickstart
+- `#status`         — honest framing of what's not yet built
+- `#join`           — how to contribute
+- *(cta-final)*     — closing CTA with sign-in screenshot
 
 There is no second page, no blog, no docs site. Long-form lives on GitHub.
 
@@ -49,15 +54,21 @@ without a mirror-and-commit step in this repo.
 
 **Consequences:**
 
-- If you need a new component or token, **add it to the brand repo first**
-  ([`github.com/aiqadam/brand.aiqadam.org`](https://github.com/aiqadam/brand.aiqadam.org)),
-  push, then reference it from `index.html` here.
-- Never invent new colours, fonts, or component primitives in this repo.
+- `brand.aiqadam.org` is treated as a **stable, read-only reference**.
+  Do not propose changes to it (no PRs adding components, no edits to
+  `components.css` / `tokens.css`). It stays stable so every consumer
+  site (this one, `build.aiqadam.org`, etc.) coheres against the same
+  snapshot.
+- Page-specific composition — hero layout, split sections, screenshot
+  frames, dual-shot rows, feature grids, status cards — lives in the
+  `<style>` block inside `index.html`. That is fine and expected: it is
+  composition on top of the design system, not a replacement of it.
+- Never invent new colours, fonts, or component primitives. Only use
+  existing tokens (`--primary`, `--card`, `--border`,
+  `--muted-foreground`, …) and existing brand components (`.btn`,
+  `.card`, `.badge`, `.mockup`, `.cover`, …).
 - Don't reintroduce a local `tokens.css`, `components.css`, or `brand/`
   directory — that defeats the live-link design.
-- Page-specific styling (the hero, the feature-grid, quickstart layout)
-  lives in the `<style>` block inside `index.html`. That is fine — it is
-  composition on top of the design system, not a replacement of it.
 - If you're previewing locally and the network is unreachable, the page
   will render unstyled. That's expected — open the live brand site or
   work online.
@@ -67,15 +78,22 @@ brand site these two live in `docs.css` (which the brand site treats as
 "page chrome shared by docs pillars"), not `components.css`. We only load
 `tokens.css` and `components.css` cross-origin, so the github-corner and
 aiq-build-badge styles are **inlined verbatim** inside the `<style>` block
-of `index.html`. If you upgrade those styles, update both places —
-ideally push them into `brand.aiqadam.org/components.css` so they ship
-to every consumer, then drop the inline copy here.
+of `index.html`. Keep them in sync with the brand site by hand if the
+brand snapshot ever shifts.
 
 ## File layout
 
 ```
 .
 ├── index.html              ← the landing (only HTML page)
+│
+├── assets/
+│   └── product/            ← 9 product screenshots (1280×633 PNG)
+│                              + SCREENSHOTS.md (recapture recipe)
+│
+├── run.sh                  ← one-line installer — served at
+│                              https://flow.aiqadam.org/run.sh
+│                              (curl … | sh quickstart target)
 │
 ├── og-image.svg            ← 1200×630 social preview — source
 ├── og-image.png            ← 1200×630 social preview — referenced from <meta og:image>
@@ -91,15 +109,19 @@ to every consumer, then drop the inline copy here.
 └── CLAUDE.md               ← symlink → AGENTS.md
 ```
 
-That's the whole repo. No CSS, no logo SVGs, no scripts directory.
+That's the whole repo. No CSS, no logo SVGs, no scripts directory beyond
+the single `run.sh` quickstart installer.
 
-## The single asset exception: og-image
+## Project-specific assets (local)
+
+Two narrow exceptions where assets live in this repo rather than being
+referenced from `brand.aiqadam.org`:
+
+### 1. og-image (social preview)
 
 Social platforms (Facebook, LinkedIn, Telegram, WhatsApp) don't render SVG
 preview cards reliably, and the brand site's own `og-image.svg` is
 specifically branded "AI Qadam Brand Guidelines" — wrong for Qadam Flow.
-
-So this repo keeps **one** project-specific asset locally:
 
 - `og-image.svg` — the source (footprint mark on the right, Qadam Flow
   title + tagline on the left, brand teal accent stripe, dark surface).
@@ -117,6 +139,40 @@ To regenerate the PNG after editing the SVG:
 ```
 
 Commit both files. The PNG is what `<meta property="og:image">` points at.
+
+### 2. Product screenshots (`assets/product/`)
+
+Nine production-stack screenshots of the Qadam Flow product, captured
+from `qadam-flow:latest` running locally and used throughout the
+landing's story arc (hero, templates, builder, integrations, AI / MCP,
+runs, self-host, sign-in CTA).
+
+- Lives only here. Originally produced in `qadam-flow/landing-export/`,
+  but that staging directory was removed once the landing shipped —
+  this repo is now the source of truth.
+- Resolution: 1280×633 (rendered at ~50% width on desktop — sharp enough
+  for retina at that scale without a 2× recapture).
+- File naming: `01-signin.png` through `09-platform-users.png` matches
+  the order documented in `assets/product/SCREENSHOTS.md`.
+
+To re-capture after the product changes, follow the reproduction recipe
+in `assets/product/SCREENSHOTS.md` (run `qadam-flow:latest` locally,
+build the Ollama-webhook flow via the API, screenshot at 1280×640 via
+agent-browser), then overwrite the PNGs in place.
+
+### 3. Quickstart installer (`run.sh`)
+
+The landing's quickstart promises
+`curl -fsSL https://flow.aiqadam.org/run.sh | sh` — `run.sh` therefore
+has to live at the repo root so GitHub Pages serves it at that URL.
+
+- This is a synced copy of `qadam-flow/run.sh` from the product repo.
+- The script itself downloads `docker-compose.yml` from
+  `raw.githubusercontent.com/aiqadam/qadam-flow/main/docker-compose.yml`
+  — we do not host that file here.
+- Keep this in sync with the upstream `qadam-flow/run.sh` when it
+  changes. The script is the public install contract, so changes
+  shouldn't be silent.
 
 ## Conventions
 

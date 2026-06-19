@@ -22,12 +22,19 @@ sync with the rest of the AI Qadam umbrella.
 ## Edit
 
 - Content, structure, page-specific styles → `index.html`
+- Product screenshots → `assets/product/` (source of truth lives here;
+  recapture recipe in `assets/product/SCREENSHOTS.md`)
+- Quickstart installer → `run.sh` at repo root, served at
+  `https://flow.aiqadam.org/run.sh`. Synced from `qadam-flow/run.sh` —
+  keep in sync when the upstream installer changes.
 - Social preview image → `og-image.svg` (regenerate `og-image.png` with
   Inkscape; see [`AGENTS.md`](AGENTS.md))
-- Design system (colours, components, logo SVGs) → **edit upstream** at
-  [`github.com/aiqadam/brand.aiqadam.org`](https://github.com/aiqadam/brand.aiqadam.org).
-  This repo references the brand site live; do not reintroduce local
-  mirrors of `tokens.css`, `components.css`, or `brand/*.svg`.
+- Design system (colours, components, logo SVGs) → referenced live from
+  [`brand.aiqadam.org`](https://brand.aiqadam.org) as a stable read-only
+  source of truth. Do not reintroduce local mirrors of `tokens.css`,
+  `components.css`, or `brand/*.svg`. Page-specific composition (hero
+  layout, split sections, screenshot frames) lives in the `<style>`
+  block inside `index.html` — that is intended and fine.
 
 ## Deploy
 
