@@ -50,7 +50,7 @@ Global Board). It is not a brand a partner can buy.
 
 - AI Qadam community: `https://aiqadam.org`
 - AI Qadam Brand Guidelines: `https://brand.aiqadam.org`
-- AI Qadam Build accelerator: `https://build.aiqadam.org`
+- AI Qadam Build (open-source infrastructure layer): `https://build.aiqadam.org`
 
 ## What stage it is at
 
