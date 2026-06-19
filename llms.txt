@@ -1,0 +1,79 @@
+# Qadam Flow
+
+> Open-source workflow automation, built by the region for the region.
+> Localised, self-hosted, free of paid tiers and enterprise paywalls.
+> The inaugural AI Qadam Build project.
+
+Qadam Flow is a visual workflow automation platform — connect apps and
+services with drag-and-drop flows. It is forked from the MIT-licensed
+[Activepieces](https://github.com/activepieces/activepieces) core, with
+enterprise code removed and Central-Asia-first localisation and integrations
+prioritised in its place.
+
+The product code lives at
+`https://github.com/aiqadam/qadam-flow`. This site
+(`https://flow.aiqadam.org/`) is the public landing.
+
+## What it is
+
+- **Open-source workflow automation** — visual builder, no code required.
+- **Self-hosted** — Docker image, Helm chart, your infrastructure. Data
+  never leaves the perimeter.
+- **Localised** — UI in Russian, Uzbek, Kazakh, English. Localisation is
+  ongoing.
+- **Regional integrations** — Payme, Click, Uzum, Kaspi, and local APIs
+  are priority work, not "someday" tickets.
+- **No enterprise paywall** — SSO, RBAC, audit logs are roadmap items,
+  never paid features.
+- **MIT licensed.**
+
+## Key pages
+
+- [Landing — flow.aiqadam.org](https://flow.aiqadam.org/): the canonical
+  public page, with the why, the feature list, a Docker quickstart, and
+  honest status of the project.
+- [Source repository](https://github.com/aiqadam/qadam-flow): code,
+  issues, roadmap, contributing guide, governance.
+- [Roadmap](https://github.com/aiqadam/qadam-flow/blob/main/ROADMAP.md):
+  what is built, what is in progress, what is on the radar.
+- [Contributing](https://github.com/aiqadam/qadam-flow/blob/main/CONTRIBUTING.md):
+  how to write a piece, translate the UI, or report a bug.
+- [Governance](https://github.com/aiqadam/qadam-flow/blob/main/GOVERNANCE.md):
+  how decisions are made; DCO; no copyright assignment.
+
+## Relationship to AI Qadam
+
+Qadam Flow is the first project recognised as **AI Qadam Build** —
+community-stewarded open-source software built by AI Qadam practitioners.
+Recognition is granted by community leads (council of country leads +
+Global Board). It is not a brand a partner can buy.
+
+- AI Qadam community: `https://aiqadam.org`
+- AI Qadam Brand Guidelines: `https://brand.aiqadam.org`
+- AI Qadam Build accelerator: `https://build.aiqadam.org`
+
+## What stage it is at
+
+Early. Honest about it. The MIT core of Activepieces has been forked and
+cleaned of enterprise code; localisation and regional integrations are the
+current focus. Enterprise functions (SSO / RBAC / audit) are built as real
+deployments need them, not on a fixed schedule. Maintained by AI Qadam,
+under the founder's stewardship today but structured to belong to the
+community over time (DCO, no copyright assignment).
+
+## Important constraints
+
+- AI Qadam brand assets (name, marks, wordmark, four-dot motif, brand teal
+  as primary brand colour) used on this site are NOT covered by Qadam
+  Flow's MIT licence — they remain © AI Qadam Community and are governed
+  by the [Brand Usage Policy](https://brand.aiqadam.org/brand-use.html).
+- "AI Qadam Build" status cannot be self-declared by forks. Recognition
+  is granted by community leads.
+- The product is open-source under MIT. The brand is not.
+
+## Contact
+
+- For partnership, chapter, or brand-use questions:
+  `brand@aiqadam.org`
+- For Qadam Flow product and contribution questions: open an issue on
+  GitHub.
